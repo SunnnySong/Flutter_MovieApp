@@ -7,11 +7,9 @@ enum MovieEndpoint {
 }
 
 extension MovieEndpointExtension on MovieEndpoint {
-  // static String baseUrl = "https://api.themoviedb.org/3";
-
-  // String get baseUrl {
-  //   return "https://api.themoviedb.org/3";
-  // }
+  String get baseUrl {
+    return "https://api.themoviedb.org/3";
+  }
 
   String get path {
     switch (this) {
