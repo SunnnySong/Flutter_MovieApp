@@ -34,11 +34,6 @@ final class _$MovieService extends MovieService {
       endpoint.method.name,
       Uri.parse(path),
       Uri.parse(endpoint.baseUrl),
-      headers: {
-        "accept": "application/json",
-        "Authorization":
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMzE5ZmEwOGQ1ZmRhMjBjNzAwMzIzYmMwOWIyYjZlMSIsInN1YiI6IjY2NWQ2OWNkODJhMDZhMzQ5YjkwNzUyYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.GMd-UQxf8HdKQId_k9OUQ3ZYCXt9KMfFfqZGCPKl9cI"
-      },
     ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:flutter_movie_app/sources/network/network_client/Interceptors.dart';
 import 'package:flutter_movie_app/sources/network/services/movie_service.dart';
 
 class NetworkClient {
@@ -26,8 +27,11 @@ class NetworkClient {
       services: [
         MovieService.create(),
       ],
-      interceptors: [],
-      // converter:
+      interceptors: [
+        RequestInterceptor(),
+      ],
+      converter: const JsonConverter(),
+      errorConverter: const JsonConverter(),
     );
   }
 }

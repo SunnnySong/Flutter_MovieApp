@@ -35,18 +35,14 @@ class _HomeState extends State<Home> {
   }
 
   void doNetwork() async {
-    // final chopper = ChopperClient(
-    //   services: [
-    //     MovieService.create(),
-    //   ], // JSON 변환기 추가
-    // );
-    // NetworkClient.createClient();
-    final movieService = MovieService.create(NetworkClient().client);
+    final client = NetworkClient().client;
+    final movieService = MovieService.create(client);
 
     final response = await movieService.getLastedMovie();
     if (response.isSuccessful) {
       // Successful request
       // final body = response.body;
+      _logger.i(body);
       _logger.i(response.base.request);
       _logger.i(response.statusCode);
       // _logger.i(body);
