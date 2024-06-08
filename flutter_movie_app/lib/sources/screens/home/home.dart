@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movie_app/sources/network/network_client/network_Client.dart';
+import 'package:flutter_movie_app/sources/network/models/response.dart';
+import 'package:flutter_movie_app/sources/screens/home/models/movie.dart';
 import 'package:logger/logger.dart';
 
-import 'package:chopper/chopper.dart';
 import 'package:flutter_movie_app/sources/network/services/movie_service.dart';
 
 class Home extends StatefulWidget {
@@ -35,22 +35,15 @@ class _HomeState extends State<Home> {
   }
 
   void doNetwork() async {
-    final client = NetworkClient().client;
-    final movieService = MovieService.create(client);
+    final movieService = MovieService.create();
+    final response = await movieService.fetchLastedMovie();
+    _logger.i(response);
+    final result = response.body;
 
-    final response = await movieService.getLastedMovie();
-    if (response.isSuccessful) {
-      // Successful request
-      // final body = response.body;
-      _logger.i(body);
-      _logger.i(response.base.request);
-      _logger.i(response.statusCode);
-      // _logger.i(body);
-    } else {
-      // Error code received from server
-      // final code = response.statusCode;
-      final error = response.error;
-      _logger.i(error);
+    if (result is Success<Movie>) {
+      _logger.i(result.value.id);
+      _logger.i(result.value.originCountry);
+      _logger.i(result.value.originalTitle);
     }
   }
 }

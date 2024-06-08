@@ -18,15 +18,16 @@ final class _$MovieService extends MovieService {
   final Type definitionType = MovieService;
 
   @override
-  Future<InvalidType> fetchLastedMovie() async {
+  Future<Response<Result<Movie>>> fetchLastedMovie() {
     final Uri $url = Uri.parse('/movie/latest');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
     );
-    final Response $response =
-        await client.send<InvalidType, InvalidType>($request);
-    return $response.bodyOrThrow;
+    return client.send<Result<Movie>, Movie>(
+      $request,
+      responseConverter: MovieService.movieResponseConverter,
+    );
   }
 }

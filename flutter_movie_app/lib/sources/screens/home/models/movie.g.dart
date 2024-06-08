@@ -6,17 +6,16 @@ part of 'movie.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MovieImpl _$$MovieImplFromJson(Map<String, dynamic> json) => _$MovieImpl(
+Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       id: (json['id'] as num).toInt(),
-      originCountry: (json['originCountry'] as List<dynamic>)
+      originCountry: (json['origin_country'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      originalTitle: json['originalTitle'] as String,
+      originalTitle: json['original_title'] as String,
     );
 
-Map<String, dynamic> _$$MovieImplToJson(_$MovieImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'id': instance.id,
-      'originCountry': instance.originCountry,
-      'originalTitle': instance.originalTitle,
+      'origin_country': instance.originCountry,
+      'original_title': instance.originalTitle,
     };
