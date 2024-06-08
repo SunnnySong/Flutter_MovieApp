@@ -18,22 +18,15 @@ final class _$MovieService extends MovieService {
   final Type definitionType = MovieService;
 
   @override
-  Future<Response<dynamic>> getLastedMovie() {
-    // @Get(path: '/todos/1')
-    // Future<Response> getLastedMovie();
-
-    // 동일한 코드
-    /* 어노테이션을 사용하지 못한 이유
-    - path가 MovieEndpoint.fetchTestData.path로 extension method로 정의되어있음.
-    - 다트에서는 컴파일 타임 상수(constant)로 extension method를 사용할 수 없음.
-    */
-    final endpoint = MovieEndpoint.fetchLastMovies;
-    final path = endpoint.path;
-
-    return client.send(Request(
-      endpoint.method.name,
-      Uri.parse(path),
-      Uri.parse(endpoint.baseUrl),
-    ));
+  Future<InvalidType> fetchLastedMovie() async {
+    final Uri $url = Uri.parse('/movie/latest');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    final Response $response =
+        await client.send<InvalidType, InvalidType>($request);
+    return $response.bodyOrThrow;
   }
 }
