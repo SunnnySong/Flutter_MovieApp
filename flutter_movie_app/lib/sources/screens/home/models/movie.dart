@@ -1,20 +1,15 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-part "movie.g.dart";
+part 'movie.freezed.dart';
+part 'movie.g.dart';
 
-@JsonSerializable()
-class Movie {
-  int id;
-  List<String> originCountry;
-  String originalTitle;
+@freezed
+class Movie with _$Movie {
+  const factory Movie({
+    required int id,
+    required List<String> originCountry,
+    required String originalTitle,
+  }) = _Movie;
 
-  Movie({
-    required this.id,
-    required this.originCountry,
-    required this.originalTitle,
-  });
-
-  factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MovieToJson(this);
+  factory Movie.fromJson(Map<String, Object?> json) => _$MovieFromJson(json);
 }
