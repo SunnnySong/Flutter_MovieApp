@@ -44,6 +44,8 @@ class _HomeState extends State<Home> {
       _logger.i(result.value.id);
       _logger.i(result.value.originCountry);
       _logger.i(result.value.originalTitle);
+    } else if (result is Error<Movie>) {
+      _logger.i(result.exception);
     }
   }
 }

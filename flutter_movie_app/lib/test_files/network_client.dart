@@ -1,5 +1,5 @@
 import 'package:chopper/chopper.dart';
-import 'package:flutter_movie_app/sources/network/network_client/Interceptors.dart';
+import 'package:flutter_movie_app/sources/network/network_client/interceptors.dart';
 import 'package:flutter_movie_app/sources/network/services/movie_service.dart';
 
 //! 안쓰는 파일

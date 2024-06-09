@@ -27,7 +27,7 @@ final class _$MovieService extends MovieService {
     );
     return client.send<Result<Movie>, Movie>(
       $request,
-      responseConverter: MovieService.movieResponseConverter,
+      responseConverter: movieResponseConverter,
     );
   }
 }

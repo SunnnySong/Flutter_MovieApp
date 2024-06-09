@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
-import 'package:logger/logger.dart';
 import 'dart:async';
 
 import '../../screens/home/models/movie.dart';
 import '../models/response.dart';
-import '../network_client/Interceptors.dart';
+import '../network_client/interceptors.dart';
 import 'service_interface.dart';
 
 part 'movie_service.chopper.dart';
@@ -18,7 +17,7 @@ const String baseUrl = 'https://api.themoviedb.org/3';
 abstract class MovieService extends ChopperService implements ServiceInterface {
   @override
   @FactoryConverter(
-    response: movieResponseConverter,
+    response: MovieServiceConverter.movieResponseConverter,
   )
   @Get(path: '/movie/latest')
   Future<MovieResponse> fetchLastedMovie();
@@ -32,14 +31,16 @@ abstract class MovieService extends ChopperService implements ServiceInterface {
         RequestInterceptor(),
       ],
       converter: const JsonConverter(),
-      errorConverter: const JsonConverter(),
+      errorConverter: ResponseErrorConverter(),
       services: [
         _$MovieService(),
       ],
     );
     return _$MovieService(client);
   }
+}
 
+extension MovieServiceConverter on MovieService {
   static FutureOr<MovieResponse> movieResponseConverter(Response response) {
     final data = json.decode(response.body);
     final movieData = Movie.fromJson(data);
