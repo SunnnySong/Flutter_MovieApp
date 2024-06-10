@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:chopper/chopper.dart";
+import "package:flutter_movie_app/components/api_config.dart";
 import "package:flutter_movie_app/models/movie_list.dart";
 import "package:flutter_movie_app/models/movie_list_converter.dart";
 import "package:flutter_movie_app/network/network_interceptor.dart";
@@ -19,7 +20,7 @@ abstract class MovieService extends ChopperService {
 
   static MovieService create() {
     final client = ChopperClient(
-      baseUrl: Uri.parse('https://api.themoviedb.org'),
+      baseUrl: Uri.parse(ApiConfig.BASE_API_URL),
       services: [
         _$MovieService(),
       ],
