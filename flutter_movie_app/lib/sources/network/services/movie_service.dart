@@ -17,7 +17,7 @@ const String baseUrl = 'https://api.themoviedb.org/3';
 abstract class MovieService extends ChopperService implements ServiceInterface {
   @override
   @FactoryConverter(
-    response: MovieServiceConverter.movieResponseConverter,
+    response: movieResponseConverter,
   )
   @Get(path: '/movie/latest')
   Future<MovieResponse> fetchLastedMovie();
@@ -38,11 +38,9 @@ abstract class MovieService extends ChopperService implements ServiceInterface {
     );
     return _$MovieService(client);
   }
-}
 
-extension MovieServiceConverter on MovieService {
   static FutureOr<MovieResponse> movieResponseConverter(Response response) {
-    final data = json.decode(response.body);
+    final data = jsonDecode(response.body);
     final movieData = Movie.fromJson(data);
     final result = Success(movieData);
     return response.copyWith(body: result);
