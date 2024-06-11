@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
+        backgroundColor: const Color(0xFF0F0F10),
         body: const SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(left: 20),
@@ -62,7 +63,6 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        backgroundColor: const Color(0xFF0F0F10),
       ),
     );
   }
