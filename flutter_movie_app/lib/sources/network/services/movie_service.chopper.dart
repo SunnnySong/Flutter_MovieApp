@@ -18,16 +18,24 @@ final class _$MovieService extends MovieService {
   final Type definitionType = MovieService;
 
   @override
-  Future<Response<Result<Movie>>> fetchLastedMovie() {
-    final Uri $url = Uri.parse('/movie/latest');
+  Future<Response<Result<MovieList>>> fetchNowPlayingMovieList({
+    String language = "ko-KR",
+    int page = 1,
+  }) {
+    final Uri $url = Uri.parse('/movie/now_playing');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'language': language,
+      'page': page,
+    };
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
+      parameters: $params,
     );
-    return client.send<Result<Movie>, Movie>(
+    return client.send<Result<MovieList>, MovieList>(
       $request,
-      responseConverter: MovieService.movieResponseConverter,
+      responseConverter: MovieService.movieListResponseConverter,
     );
   }
 }
