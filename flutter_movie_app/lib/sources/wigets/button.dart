@@ -50,7 +50,7 @@ class Button extends StatefulWidget {
   });
 
   @override
-  State<Button> createState() => _ButtonState();
+  State<Button> get createState => _ButtonState();
 }
 
 class _ButtonState extends State<Button> {
