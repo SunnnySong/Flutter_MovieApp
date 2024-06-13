@@ -19,7 +19,7 @@ final class _$MovieService extends MovieService {
 
   @override
   Future<Response<MovieList>> getPopularMovies({int page = 1}) {
-    final Uri $url = Uri.parse('/3/movie/popular');
+    final Uri $url = Uri.parse('/movie/popular');
     final Map<String, dynamic> $params = <String, dynamic>{'page': page};
     final Request $request = Request(
       'GET',
@@ -27,22 +27,56 @@ final class _$MovieService extends MovieService {
       client.baseUrl,
       parameters: $params,
     );
-    return client.send<MovieList, MovieList>(
+    return client.send<MovieList, MovieList>($request);
+  }
+
+  @override
+  Future<Response<MovieDetail>> getMovieDetail(int movieId) {
+    final Uri $url = Uri.parse('/movie/${movieId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<MovieDetail, MovieDetail>($request);
+  }
+
+  @override
+  Future<Response<List<Cast>>> getMovieCredits(int movieId) {
+    final Uri $url = Uri.parse('/movie/${movieId}/credits');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<Cast>, Cast>($request);
+  }
+
+  @override
+  Future<Response<USCertification>> getMoviesCertification(int movieId) {
+    final Uri $url = Uri.parse('/movie/${movieId}/release_dates');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<USCertification, USCertification>(
       $request,
-      responseConverter: MovieListConverter.response,
+      responseConverter: CertificationConverter.response,
     );
   }
 
   @override
-  Future<Response<dynamic>> getTopRatedMovies({int page = 1}) {
-    final Uri $url = Uri.parse('/3/movie/top_rated');
-    final Map<String, dynamic> $params = <String, dynamic>{'page': page};
+  Future<Response<List<Video>>> getMovieTeasers(int movieId) {
+    final Uri $url = Uri.parse('/movie/${movieId}/videos');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
-      parameters: $params,
     );
-    return client.send<dynamic, dynamic>($request);
+    return client.send<List<Video>, Video>(
+      $request,
+      responseConverter: TeasersConverter.response,
+    );
   }
 }
