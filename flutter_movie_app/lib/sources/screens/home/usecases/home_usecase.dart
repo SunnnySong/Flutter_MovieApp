@@ -10,13 +10,4 @@ class HomeUseCase {
   // Future<List<Movie>> getMovies() async {
   //   return await _homeRepository.getMovies();
   // }
-
-// if (!newDataRequired && currentResponse != null) {
-//       return currentResponse!;
-//     }
-//     newDataRequired = false;
-//     final recipeService = ref.watch(serviceProvider);
-//     currentResponse = recipeService.queryRecipes(
-//         searchTextController.text.trim(), currentStartPosition, pageCount);
-//     return currentResponse!;
 }

@@ -5,10 +5,6 @@ import 'package:flutter_movie_app/sources/screens/home/models/now_playing_movie.
 import 'package:flutter_movie_app/sources/wigets/button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:logger/logger.dart';
-
-import 'package:flutter_movie_app/sources/network/services/movie_service.dart';
-
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
@@ -17,77 +13,10 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  final Logger _logger = Logger();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '야곰 시네마',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: const Color(0xFF0F0F10),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.movie_creation_outlined),
-            color: const Color(0xFFCCCCCC),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.play_circle_outline_outlined),
-            color: const Color(0xFFCCCCCC),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.menu),
-            color: const Color(0xFFCCCCCC),
-          ),
-        ],
-      ),
-      backgroundColor: const Color(0xFF0F0F10),
-      body: const SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Column(
-            children: [
-              FirstSection(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void doNetwork() async {
-    final movieService = MovieService.create();
-    final response = await movieService.fetchNowPlayingMovieList();
-    _logger.i(response);
-    final result = response.body;
-
-    if (result is Success<MovieList>) {
-      _logger.i(result.value.results[0].title);
-    } else if (result is Error<MovieList>) {
-      _logger.i(result.exception);
-    }
-  }
-}
-
-class FirstSection extends ConsumerStatefulWidget {
-  const FirstSection({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> get createState => _FirstSectionState();
-}
-
-class _FirstSectionState extends ConsumerState<FirstSection> {
+  //! 속성
   bool _isSelected = true;
 
+  //! 함수
   // 라디오 버튼처럼 A가 선택되면 B는 선택되지 않도록 하는 함수
   void _toggleSelected() {
     setState(() {
@@ -95,8 +24,67 @@ class _FirstSectionState extends ConsumerState<FirstSection> {
     });
   }
 
+  Future<MovieList> _fetchNowPlayingMovieList() async {
+    final response = await ref.read(serviceProvider).fetchNowPlayingMovieList();
+    final result = response.body;
+    if (result is Success<MovieList>) {
+      return result.value;
+    } else {
+      throw Exception('Failed to load movies');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar(),
+      backgroundColor: const Color(0xFF0F0F10),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Column(
+            children: [
+              _firstSection(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  //! UI
+  PreferredSizeWidget _appBar() {
+    return AppBar(
+      title: const Text(
+        '야곰 시네마',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: const Color(0xFF0F0F10),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.movie_creation_outlined),
+          color: const Color(0xFFCCCCCC),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.play_circle_outline_outlined),
+          color: const Color(0xFFCCCCCC),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.menu),
+          color: const Color(0xFFCCCCCC),
+        ),
+      ],
+    );
+  }
+
+  Widget _firstSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 24, bottom: 20),
       child: Column(
@@ -161,19 +149,9 @@ class _FirstSectionState extends ConsumerState<FirstSection> {
     );
   }
 
-  Future<MovieList> fetchNowPlayingMovieList() async {
-    final response = await ref.read(serviceProvider).fetchNowPlayingMovieList();
-    final result = response.body;
-    if (result is Success<MovieList>) {
-      return result.value;
-    } else {
-      throw Exception('Failed to load movies');
-    }
-  }
-
   Widget _buildMovieList(BuildContext context) {
     return FutureBuilder<MovieList>(
-      future: fetchNowPlayingMovieList(),
+      future: _fetchNowPlayingMovieList(),
       builder: (context, snapshot) {
         return SizedBox(
           height: 260,
