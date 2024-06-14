@@ -44,7 +44,7 @@ abstract class MovieService extends ChopperService {
       converter: GenericJsonConverter({
         MovieList: (json) => MovieList.fromJson(json),
         MovieDetail: (json) => MovieDetail.fromJson(json),
-        List<Cast>: (json) => json['cast'].map((e) => Cast.fromJson(e)).toList(),
+        List<Cast>: (json) => (json['cast'] as List<dynamic>).map((e) => Cast.fromJson(e)).toList(),
       }),
     );
     return _$MovieService(client);

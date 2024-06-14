@@ -14,7 +14,7 @@ class Cast {
   final String name;
 
   @JsonKey(name: "profile_path")
-  final String profilePath;
+  final String? profilePath;
 
   @JsonKey(name: "character")
   final String? character;
