@@ -5,7 +5,7 @@ part 'now_playing_movie.g.dart';
 @JsonSerializable()
 class MovieList {
   int page;
-  List<MovieResult> results;
+  List<Movie> results;
 
   MovieList({
     required this.page,
@@ -19,7 +19,7 @@ class MovieList {
 }
 
 @JsonSerializable()
-class MovieResult {
+class Movie {
   bool adult;
   @JsonKey(name: 'backdrop_path')
   String backdropPath;
@@ -35,7 +35,7 @@ class MovieResult {
   String title;
   bool video;
 
-  MovieResult({
+  Movie({
     required this.adult,
     required this.backdropPath,
     required this.id,
@@ -48,8 +48,7 @@ class MovieResult {
     required this.video,
   });
 
-  factory MovieResult.fromJson(Map<String, dynamic> json) =>
-      _$MovieResultFromJson(json);
+  factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MovieResultToJson(this);
+  Map<String, dynamic> toJson() => _$MovieToJson(this);
 }

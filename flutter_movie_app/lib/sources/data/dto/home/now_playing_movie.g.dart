@@ -9,7 +9,7 @@ part of 'now_playing_movie.dart';
 MovieList _$MovieListFromJson(Map<String, dynamic> json) => MovieList(
       page: (json['page'] as num).toInt(),
       results: (json['results'] as List<dynamic>)
-          .map((e) => MovieResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => Movie.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -18,7 +18,7 @@ Map<String, dynamic> _$MovieListToJson(MovieList instance) => <String, dynamic>{
       'results': instance.results,
     };
 
-MovieResult _$MovieResultFromJson(Map<String, dynamic> json) => MovieResult(
+Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       adult: json['adult'] as bool,
       backdropPath: json['backdrop_path'] as String,
       id: (json['id'] as num).toInt(),
@@ -31,8 +31,7 @@ MovieResult _$MovieResultFromJson(Map<String, dynamic> json) => MovieResult(
       video: json['video'] as bool,
     );
 
-Map<String, dynamic> _$MovieResultToJson(MovieResult instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'adult': instance.adult,
       'backdrop_path': instance.backdropPath,
       'id': instance.id,

@@ -11,7 +11,7 @@ class HomeUsecase {
 
   HomeUsecase(this._movieRepository);
 
-  Future<List<MovieResult>> fetchMoviesByReleaseDate() async {
+  Future<List<Movie>> fetchMoviesByReleaseDate() async {
     final movies = await _movieRepository.fetchNowPlayingMovies();
     movies.sort((a, b) => a.releaseDate.compareTo(b.releaseDate));
 
@@ -25,7 +25,10 @@ HomeUsecase homeUsecase(HomeUsecaseRef ref) {
   final movieRepository = MovieRepository(movieService);
   return HomeUsecase(movieRepository);
 }
-
+/*
+ref.read(homeUsecaseProvider).fetchMoviesByReleaseDate();
+이런식으로 사용할 수 있음. 근데 뭐가 더 좋은 방법이지?
+*/
 
   // final MovieRepositoryInterface _movieRepository;
 

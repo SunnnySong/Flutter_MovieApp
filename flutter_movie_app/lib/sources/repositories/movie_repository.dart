@@ -13,7 +13,7 @@ class MovieRepository implements MovieRepositoryInterface {
   MovieRepository(this._movieService);
 
   @override
-  Future<List<MovieResult>> fetchNowPlayingMovies({
+  Future<List<Movie>> fetchNowPlayingMovies({
     String language = "ko-KR",
     int page = 1,
   }) async {
@@ -32,7 +32,7 @@ class MovieRepository implements MovieRepositoryInterface {
   }
 
   @override
-  Future<List<MovieResult>> fetchMoviesByReleaseDate() async {
+  Future<List<Movie>> fetchMoviesByReleaseDate() async {
     final movies = await fetchNowPlayingMovies();
     movies.sort((a, b) => a.releaseDate.compareTo(b.releaseDate));
     return movies;
@@ -46,7 +46,6 @@ MovieRepository movieRepository(MovieRepositoryRef ref) {
 }
 
 @riverpod
-Future<List<MovieResult>> fetchMoviesByReleaseDate(
-    FetchMoviesByReleaseDateRef ref) {
+Future<List<Movie>> fetchMoviesByReleaseDate(FetchMoviesByReleaseDateRef ref) {
   return ref.watch(movieRepositoryProvider).fetchMoviesByReleaseDate();
 }
