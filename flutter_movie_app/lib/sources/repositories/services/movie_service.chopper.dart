@@ -18,10 +18,10 @@ final class _$MovieService extends MovieService {
   final Type definitionType = MovieService;
 
   @override
-  Future<Response<Result<MovieList>>> fetchNowPlayingMovieList({
-    String language = "ko-KR",
-    int page = 1,
-  }) {
+  Future<Response<Result<MovieList>>> fetchNowPlayingMovies(
+    String language,
+    int page,
+  ) {
     final Uri $url = Uri.parse('/movie/now_playing');
     final Map<String, dynamic> $params = <String, dynamic>{
       'language': language,

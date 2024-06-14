@@ -1,4 +1,4 @@
-import 'package:flutter_movie_app/sources/network/models/method.dart';
+import 'package:flutter_movie_app/sources/network/method.dart';
 
 enum MovieEndpoint {
   fetchLastMovies,

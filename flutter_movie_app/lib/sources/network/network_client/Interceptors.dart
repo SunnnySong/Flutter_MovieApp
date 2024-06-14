@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:chopper/chopper.dart';
-import 'package:flutter_movie_app/sources/network/models/http_status.dart';
+import 'package:flutter_movie_app/sources/network/http_status.dart';
 
 class RequestInterceptor implements Interceptor {
   // 나중엔 이 토큰을 다른 곳에다 저장해서 불러오기
