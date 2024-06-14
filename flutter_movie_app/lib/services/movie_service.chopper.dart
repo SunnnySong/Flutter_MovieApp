@@ -18,7 +18,7 @@ final class _$MovieService extends MovieService {
   final Type definitionType = MovieService;
 
   @override
-  Future<Response<MovieList>> getPopularMovies({int page = 1}) {
+  Future<Response<List<Movie>>> getPopularMovies({int page = 1}) {
     final Uri $url = Uri.parse('/movie/popular');
     final Map<String, dynamic> $params = <String, dynamic>{'page': page};
     final Request $request = Request(
@@ -27,7 +27,7 @@ final class _$MovieService extends MovieService {
       client.baseUrl,
       parameters: $params,
     );
-    return client.send<MovieList, MovieList>($request);
+    return client.send<List<Movie>, Movie>($request);
   }
 
   @override

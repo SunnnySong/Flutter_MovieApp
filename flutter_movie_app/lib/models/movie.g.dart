@@ -7,37 +7,19 @@ part of 'movie.dart';
 // **************************************************************************
 
 Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
-      json['adult'] as bool,
-      json['backdrop_path'] as String,
-      (json['genre_ids'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
-          .toList(),
       (json['id'] as num).toInt(),
-      json['original_language'] as String,
-      json['original_title'] as String,
-      json['overview'] as String,
-      (json['popularity'] as num).toDouble(),
+      json['backdrop_path'] as String,
       json['poster_path'] as String,
-      json['release_date'] as String,
+      json['original_title'] as String,
       json['title'] as String,
-      json['video'] as bool,
-      (json['vote_average'] as num).toDouble(),
-      (json['vote_count'] as num).toInt(),
+      json['release_date'] as String,
     );
 
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
-      'adult': instance.adult,
-      'backdrop_path': instance.backdropPath,
-      'genre_ids': instance.genreIds,
       'id': instance.id,
-      'original_language': instance.originalLanguage,
-      'original_title': instance.originalTitle,
-      'overview': instance.overview,
-      'popularity': instance.popularity,
+      'backdrop_path': instance.backdropPath,
       'poster_path': instance.posterPath,
-      'release_date': instance.releaseDate,
+      'original_title': instance.originalTitle,
       'title': instance.title,
-      'video': instance.video,
-      'vote_average': instance.voteAverage,
-      'vote_count': instance.voteCount,
+      'release_date': instance.releaseDate,
     };
