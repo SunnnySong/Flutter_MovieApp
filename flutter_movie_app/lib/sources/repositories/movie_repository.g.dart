@@ -38,5 +38,22 @@ final fetchMoviesByReleaseDateProvider =
 );
 
 typedef FetchMoviesByReleaseDateRef = AutoDisposeFutureProviderRef<List<Movie>>;
+String _$fetchMoviesByPopularityHash() =>
+    r'e1f3ec0037225c761fc5358ec55c9b2bd77b9e1e';
+
+/// See also [fetchMoviesByPopularity].
+@ProviderFor(fetchMoviesByPopularity)
+final fetchMoviesByPopularityProvider =
+    AutoDisposeFutureProvider<List<Movie>>.internal(
+  fetchMoviesByPopularity,
+  name: r'fetchMoviesByPopularityProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchMoviesByPopularityHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FetchMoviesByPopularityRef = AutoDisposeFutureProviderRef<List<Movie>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

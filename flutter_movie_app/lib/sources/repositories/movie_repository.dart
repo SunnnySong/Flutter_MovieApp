@@ -37,6 +37,14 @@ class MovieRepository implements MovieRepositoryInterface {
     movies.sort((a, b) => a.releaseDate.compareTo(b.releaseDate));
     return movies;
   }
+
+  @override
+  Future<List<Movie>> fetchMoviesByPopularity() async {
+    // 추후 다른 API로 구현
+    final movies = await fetchNowPlayingMovies();
+    movies.sort((a, b) => b.popularity.compareTo(a.popularity));
+    return movies;
+  }
 }
 
 // ! repository provider
@@ -48,4 +56,9 @@ MovieRepository movieRepository(MovieRepositoryRef ref) {
 @riverpod
 Future<List<Movie>> fetchMoviesByReleaseDate(FetchMoviesByReleaseDateRef ref) {
   return ref.watch(movieRepositoryProvider).fetchMoviesByReleaseDate();
+}
+
+@riverpod
+Future<List<Movie>> fetchMoviesByPopularity(FetchMoviesByPopularityRef ref) {
+  return ref.watch(movieRepositoryProvider).fetchMoviesByPopularity();
 }

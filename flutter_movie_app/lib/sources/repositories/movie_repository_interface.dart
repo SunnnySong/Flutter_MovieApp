@@ -8,4 +8,6 @@ abstract class MovieRepositoryInterface {
   });
 
   Future<List<Movie>> fetchMoviesByReleaseDate();
+
+  Future<List<Movie>> fetchMoviesByPopularity();
 }
