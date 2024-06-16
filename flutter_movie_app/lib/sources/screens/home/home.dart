@@ -11,11 +11,14 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(homeControllerProvider);
 
+    ScrollController scrollController = ScrollController();
+
     return Scaffold(
       appBar: _appBar(),
       backgroundColor: const Color(0xFF0F0F10),
       body: switch (state) {
         AsyncData(:final value) => SingleChildScrollView(
+            controller: scrollController,
             child: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Column(
@@ -26,7 +29,12 @@ class Home extends ConsumerWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: _secondSection(context, value, ref),
+                    child: _secondSection(
+                      context,
+                      value,
+                      ref,
+                      scrollController,
+                    ),
                   ),
                 ],
               ),
@@ -211,11 +219,30 @@ class Home extends ConsumerWidget {
     );
   }
 
-  Widget _secondSection(BuildContext context, HomeState state, WidgetRef ref) {
+  Widget _secondSection(
+    BuildContext context,
+    HomeState state,
+    WidgetRef ref,
+    ScrollController scrollController,
+  ) {
+    final GlobalKey secondSectionKey = GlobalKey();
+
     Widget plusButton = ElevatedButton(
       onPressed: () {
         ref.read(homeControllerProvider.notifier).isTappedAddButton();
+
+        // https://inma06.tistory.com/125
+        final RenderBox renderBox =
+            secondSectionKey.currentContext?.findRenderObject() as RenderBox;
+        final offset = renderBox.localToGlobal(Offset.zero);
+
+        scrollController.animateTo(
+          !state.addButtonState ? offset.dy / 2 : 0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.ease,
+        );
       },
+      key: secondSectionKey,
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF222222),
         shape: RoundedRectangleBorder(
@@ -264,7 +291,7 @@ class Home extends ConsumerWidget {
         const SizedBox(
           height: 10,
         ),
-        _buildGenreMovies(context, state),
+        _buildGenreMovies(state),
         const SizedBox(
           height: 10,
         ),
@@ -276,7 +303,7 @@ class Home extends ConsumerWidget {
     );
   }
 
-  Widget _buildGenreMovies(BuildContext context, HomeState state) {
+  Widget _buildGenreMovies(HomeState state) {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
