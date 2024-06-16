@@ -55,5 +55,19 @@ final fetchMoviesByPopularityProvider =
 );
 
 typedef FetchMoviesByPopularityRef = AutoDisposeFutureProviderRef<List<Movie>>;
+String _$fetchGenreHash() => r'deed0a68df2116921d548762dcb239a03552aead';
+
+/// See also [fetchGenre].
+@ProviderFor(fetchGenre)
+final fetchGenreProvider = AutoDisposeFutureProvider<List<Genre>>.internal(
+  fetchGenre,
+  name: r'fetchGenreProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchGenreHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FetchGenreRef = AutoDisposeFutureProviderRef<List<Genre>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

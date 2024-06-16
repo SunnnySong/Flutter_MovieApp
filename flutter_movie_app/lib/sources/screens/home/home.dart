@@ -21,6 +21,7 @@ class Home extends ConsumerWidget {
               child: Column(
                 children: [
                   _firstSection(context, value, ref),
+                  _secondSection(context, value, ref),
                 ],
               ),
             ),
@@ -70,11 +71,11 @@ class Home extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Button(
+              InteractiveButton(
                 onPressed: () {
                   ref
                       .read(homeControllerProvider.notifier)
-                      .toggleReleaseButton();
+                      .isTappedReleaseButton();
                 },
                 isSelected: state.releaseButtonState,
                 deselectedStyle: ButtonDecorationStyle(
@@ -97,11 +98,11 @@ class Home extends ConsumerWidget {
               const SizedBox(
                 width: 12,
               ),
-              Button(
+              InteractiveButton(
                 onPressed: () {
                   ref
                       .read(homeControllerProvider.notifier)
-                      .togglePopularityButton();
+                      .isTappedPopularityButton();
                 },
                 isSelected: state.popularityButtonState,
                 deselectedStyle: ButtonDecorationStyle(
@@ -176,6 +177,104 @@ class Home extends ConsumerWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _secondSection(BuildContext context, HomeState state, WidgetRef ref) {
+    Widget plusButton = ElevatedButton(
+      onPressed: () {
+        ref.read(homeControllerProvider.notifier).isTappedAddButton();
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF222222),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        fixedSize: const Size(335, 48),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            state.addButtonState ? '닫기' : '더보기',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFCCCCCC),
+            ),
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          state.addButtonState
+              ? const Icon(
+                  Icons.keyboard_arrow_up_outlined,
+                  color: Color(0xFFCCCCCC),
+                )
+              : const Icon(
+                  Icons.keyboard_arrow_down_outlined,
+                  color: Color(0xFFCCCCCC),
+                ),
+        ],
+      ),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '장르별 영화',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        _buildGenreMovies(context, state),
+        plusButton,
+      ],
+    );
+  }
+
+  Widget _buildGenreMovies(BuildContext context, HomeState state) {
+    return SizedBox(
+      width: double.infinity,
+      height: 400,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1.2,
+        ),
+        itemCount: state.genres.length,
+        itemBuilder: (context, index) => Container(
+          margin: const EdgeInsets.only(right: 12),
+          child: Column(
+            children: [
+              Container(
+                height: 64,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.red,
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Text(
+                state.genres[index].name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

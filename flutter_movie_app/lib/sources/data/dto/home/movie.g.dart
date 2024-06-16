@@ -1,19 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'now_playing_movie.dart';
+part of 'movie.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-MovieList _$MovieListFromJson(Map<String, dynamic> json) => MovieList(
+MovieDTO _$MovieDTOFromJson(Map<String, dynamic> json) => MovieDTO(
       page: (json['page'] as num).toInt(),
       results: (json['results'] as List<dynamic>)
           .map((e) => Movie.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$MovieListToJson(MovieList instance) => <String, dynamic>{
+Map<String, dynamic> _$MovieDTOToJson(MovieDTO instance) => <String, dynamic>{
       'page': instance.page,
       'results': instance.results,
     };

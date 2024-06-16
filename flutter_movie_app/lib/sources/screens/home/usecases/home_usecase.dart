@@ -1,4 +1,4 @@
-import 'package:flutter_movie_app/sources/data/dto/home/now_playing_movie.dart';
+import 'package:flutter_movie_app/sources/data/dto/home/movie.dart';
 import 'package:flutter_movie_app/sources/repositories/movie_repository.dart';
 import 'package:flutter_movie_app/sources/repositories/movie_repository_interface.dart';
 import 'package:flutter_movie_app/sources/repositories/services/movie_service.dart';

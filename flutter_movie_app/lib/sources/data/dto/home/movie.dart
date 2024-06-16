@@ -1,21 +1,21 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'now_playing_movie.g.dart';
+part 'movie.g.dart';
 
 @JsonSerializable()
-class MovieList {
+class MovieDTO {
   int page;
   List<Movie> results;
 
-  MovieList({
+  MovieDTO({
     required this.page,
     required this.results,
   });
 
-  factory MovieList.fromJson(Map<String, dynamic> json) =>
-      _$MovieListFromJson(json);
+  factory MovieDTO.fromJson(Map<String, dynamic> json) =>
+      _$MovieDTOFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MovieListToJson(this);
+  Map<String, dynamic> toJson() => _$MovieDTOToJson(this);
 }
 
 @JsonSerializable()

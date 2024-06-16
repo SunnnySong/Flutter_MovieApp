@@ -1,4 +1,5 @@
-import 'package:flutter_movie_app/sources/data/dto/home/now_playing_movie.dart';
+import 'package:flutter_movie_app/sources/data/dto/home/genre.dart';
+import 'package:flutter_movie_app/sources/data/dto/home/movie.dart';
 import 'package:flutter_movie_app/sources/repositories/movie_repository.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +15,12 @@ class HomeController extends _$HomeController {
 
   Future<HomeState> _init() async {
     final movies = await _fetchMoviesByReleaseDate();
-    return HomeState(movies: movies);
+    final genre = await _fetchGenre();
+
+    return HomeState(
+      movies: movies,
+      genres: genre,
+    );
   }
 
   Future<List<Movie>> _fetchMoviesByReleaseDate() async {
@@ -25,7 +31,11 @@ class HomeController extends _$HomeController {
     return await ref.watch(fetchMoviesByPopularityProvider.future);
   }
 
-  void toggleReleaseButton() async {
+  Future<List<Genre>> _fetchGenre() async {
+    return await ref.watch(fetchGenreProvider.future);
+  }
+
+  void isTappedReleaseButton() async {
     //? 이런 식으로 접근하면 state 객체 자체가 변경되는 것이 아니기 때문에(기존 state객체가 변경) StateNotifier가 변경을 감지하지 못함.
     //? 따라서 상태를 변경하고 싶다면 새로운 객체를 생성하고 해당 객체를 state에 할당해야 함.
     // state.value?.releaseButtonState = true;
@@ -40,19 +50,35 @@ class HomeController extends _$HomeController {
     state = AsyncValue.data(
       HomeState(
         movies: newMovies,
+        genres: state.value?.genres ?? [],
         releaseButtonState: true,
         popularityButtonState: false,
+        addButtonState: state.value!.addButtonState,
       ),
     );
   }
 
-  void togglePopularityButton() async {
+  void isTappedPopularityButton() async {
     final newMovies = await _fetchMoviesByPopularity();
     state = AsyncValue.data(
       HomeState(
         movies: newMovies,
+        genres: state.value?.genres ?? [],
         releaseButtonState: false,
         popularityButtonState: true,
+        addButtonState: state.value!.addButtonState,
+      ),
+    );
+  }
+
+  void isTappedAddButton() async {
+    state = AsyncValue.data(
+      HomeState(
+        movies: state.value?.movies ?? [],
+        releaseButtonState: state.value?.releaseButtonState ?? false,
+        popularityButtonState: state.value?.popularityButtonState ?? false,
+        addButtonState: state.value!.addButtonState ? false : true,
+        genres: state.value?.genres ?? [],
       ),
     );
   }

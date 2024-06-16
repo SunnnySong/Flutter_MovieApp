@@ -20,7 +20,7 @@ class ButtonDecorationStyle {
   });
 }
 
-class Button extends StatefulWidget {
+class InteractiveButton extends StatefulWidget {
   final ButtonDecorationStyle deselectedStyle;
   final ButtonDecorationStyle selectedStyle;
 
@@ -35,7 +35,7 @@ class Button extends StatefulWidget {
   final Function onPressed;
   final bool isSelected;
 
-  const Button({
+  const InteractiveButton({
     super.key,
     required this.isSelected,
     required this.deselectedStyle,
@@ -50,10 +50,10 @@ class Button extends StatefulWidget {
   });
 
   @override
-  State<Button> get createState => _ButtonState();
+  State<InteractiveButton> get createState => _InteractiveButtonState();
 }
 
-class _ButtonState extends State<Button> {
+class _InteractiveButtonState extends State<InteractiveButton> {
   // 버튼이 선택되었을 때와 선택되지 않았을 때의 스타일을 반환하는 함수
   ButtonDecorationStyle get _style {
     return widget.isSelected ? widget.selectedStyle : widget.deselectedStyle;

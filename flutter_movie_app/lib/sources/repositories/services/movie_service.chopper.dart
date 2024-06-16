@@ -18,7 +18,7 @@ final class _$MovieService extends MovieService {
   final Type definitionType = MovieService;
 
   @override
-  Future<Response<Result<MovieList>>> fetchNowPlayingMovies(
+  Future<Response<Result<MovieDTO>>> fetchNowPlayingMovies(
     String language,
     int page,
   ) {
@@ -33,9 +33,27 @@ final class _$MovieService extends MovieService {
       client.baseUrl,
       parameters: $params,
     );
-    return client.send<Result<MovieList>, MovieList>(
+    return client.send<Result<MovieDTO>, MovieDTO>(
       $request,
       responseConverter: MovieService.movieListResponseConverter,
+    );
+  }
+
+  @override
+  Future<Response<Result<GenreDTO>>> fetchGenre(String language) {
+    final Uri $url = Uri.parse('/genre/movie/list');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'language': language
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<Result<GenreDTO>, GenreDTO>(
+      $request,
+      responseConverter: MovieService.genreResponseConverter,
     );
   }
 }

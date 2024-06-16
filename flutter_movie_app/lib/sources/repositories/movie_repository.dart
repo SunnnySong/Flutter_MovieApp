@@ -1,4 +1,5 @@
-import 'package:flutter_movie_app/sources/data/dto/home/now_playing_movie.dart';
+import 'package:flutter_movie_app/sources/data/dto/home/genre.dart';
+import 'package:flutter_movie_app/sources/data/dto/home/movie.dart';
 import 'package:flutter_movie_app/sources/network/response.dart';
 import 'package:flutter_movie_app/sources/repositories/movie_repository_interface.dart';
 import 'package:flutter_movie_app/sources/repositories/services/movie_service.dart';
@@ -22,10 +23,27 @@ class MovieRepository implements MovieRepositoryInterface {
       page,
     );
     final result = response.body;
-    if (result is Success<MovieList>) {
+    if (result is Success<MovieDTO>) {
       // ignore: avoid_print
       print("하하 ${result.value.results[0].posterPath}");
       return result.value.results;
+    } else {
+      throw Exception('Failed to load movies');
+    }
+  }
+
+  @override
+  Future<List<Genre>> fetchGenre({
+    String language = "ko",
+  }) async {
+    final response = await _movieService.fetchGenre(
+      language,
+    );
+    final result = response.body;
+    if (result is Success<GenreDTO>) {
+      // ignore: avoid_print
+      print("하하 ${result.value.genres[0].name}");
+      return result.value.genres;
     } else {
       throw Exception('Failed to load movies');
     }
@@ -61,4 +79,9 @@ Future<List<Movie>> fetchMoviesByReleaseDate(FetchMoviesByReleaseDateRef ref) {
 @riverpod
 Future<List<Movie>> fetchMoviesByPopularity(FetchMoviesByPopularityRef ref) {
   return ref.watch(movieRepositoryProvider).fetchMoviesByPopularity();
+}
+
+@riverpod
+Future<List<Genre>> fetchGenre(FetchGenreRef ref) {
+  return ref.watch(movieRepositoryProvider).fetchGenre();
 }
