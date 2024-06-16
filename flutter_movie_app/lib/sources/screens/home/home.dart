@@ -20,8 +20,14 @@ class Home extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 20),
               child: Column(
                 children: [
-                  _firstSection(context, value, ref),
-                  _secondSection(context, value, ref),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5, bottom: 20),
+                    child: _firstSection(context, value, ref),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: _secondSection(context, value, ref),
+                  ),
                 ],
               ),
             ),
@@ -30,6 +36,33 @@ class Home extends ConsumerWidget {
         AsyncLoading() => const Text('로딩 중이에요'),
         _ => throw UnimplementedError(),
       },
+      bottomNavigationBar: _bottomNavigationBar(),
+    );
+  }
+
+  Widget _bottomNavigationBar() {
+    return BottomNavigationBar(
+      backgroundColor: const Color(0xFF0F0F10),
+      selectedItemColor: const Color(0xFFE64980),
+      unselectedItemColor: const Color(0xFFCCCCCC),
+      selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      ),
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          label: '홈',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          label: '홈',
+        ),
+      ],
     );
   }
 
@@ -65,71 +98,68 @@ class Home extends ConsumerWidget {
   }
 
   Widget _firstSection(BuildContext context, HomeState state, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 20),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              InteractiveButton(
-                onPressed: () {
-                  ref
-                      .read(homeControllerProvider.notifier)
-                      .isTappedReleaseButton();
-                },
-                isSelected: state.releaseButtonState,
-                deselectedStyle: ButtonDecorationStyle(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: const Color(0xFFCCCCCC),
-                  borderColor: const Color(0xFF444444),
-                  borderWidth: 1,
-                ),
-                selectedStyle: ButtonDecorationStyle(
-                  backgroundColor: const Color(0xFFe64980),
-                  foregroundColor: Colors.white,
-                ),
-                text: "영화개봉순",
-                cornerRadius: 48,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                verticalPadding: 13,
-                horizantalPadding: 16,
+    return Column(
+      children: [
+        Row(
+          children: [
+            InteractiveButton(
+              onPressed: () {
+                ref
+                    .read(homeControllerProvider.notifier)
+                    .isTappedReleaseButton();
+              },
+              isSelected: state.releaseButtonState,
+              deselectedStyle: ButtonDecorationStyle(
+                backgroundColor: Colors.transparent,
+                foregroundColor: const Color(0xFFCCCCCC),
+                borderColor: const Color(0xFF444444),
+                borderWidth: 1,
               ),
-              const SizedBox(
-                width: 12,
+              selectedStyle: ButtonDecorationStyle(
+                backgroundColor: const Color(0xFFe64980),
+                foregroundColor: Colors.white,
               ),
-              InteractiveButton(
-                onPressed: () {
-                  ref
-                      .read(homeControllerProvider.notifier)
-                      .isTappedPopularityButton();
-                },
-                isSelected: state.popularityButtonState,
-                deselectedStyle: ButtonDecorationStyle(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: const Color(0xFFCCCCCC),
-                  borderColor: const Color(0xFF444444),
-                  borderWidth: 1,
-                ),
-                selectedStyle: ButtonDecorationStyle(
-                  backgroundColor: const Color(0xFFe64980),
-                  foregroundColor: Colors.white,
-                ),
-                text: "예매율순",
-                cornerRadius: 48,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                verticalPadding: 13,
-                horizantalPadding: 16,
+              text: "영화개봉순",
+              cornerRadius: 48,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              verticalPadding: 13,
+              horizantalPadding: 16,
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            InteractiveButton(
+              onPressed: () {
+                ref
+                    .read(homeControllerProvider.notifier)
+                    .isTappedPopularityButton();
+              },
+              isSelected: state.popularityButtonState,
+              deselectedStyle: ButtonDecorationStyle(
+                backgroundColor: Colors.transparent,
+                foregroundColor: const Color(0xFFCCCCCC),
+                borderColor: const Color(0xFF444444),
+                borderWidth: 1,
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          _buildMovieList(context, state),
-        ],
-      ),
+              selectedStyle: ButtonDecorationStyle(
+                backgroundColor: const Color(0xFFe64980),
+                foregroundColor: Colors.white,
+              ),
+              text: "예매율순",
+              cornerRadius: 48,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              verticalPadding: 13,
+              horizantalPadding: 16,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        _buildMovieList(context, state),
+      ],
     );
   }
 
@@ -191,7 +221,7 @@ class Home extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        fixedSize: const Size(335, 48),
+        fixedSize: const Size.fromHeight(48),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -232,49 +262,51 @@ class Home extends ConsumerWidget {
           ),
         ),
         const SizedBox(
-          height: 16,
+          height: 10,
         ),
         _buildGenreMovies(context, state),
+        const SizedBox(
+          height: 10,
+        ),
         plusButton,
+        const SizedBox(
+          height: 20,
+        ),
       ],
     );
   }
 
   Widget _buildGenreMovies(BuildContext context, HomeState state) {
-    return SizedBox(
-      width: double.infinity,
-      height: 400,
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1.2,
-        ),
-        itemCount: state.genres.length,
-        itemBuilder: (context, index) => Container(
-          margin: const EdgeInsets.only(right: 12),
-          child: Column(
-            children: [
-              Container(
-                height: 64,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.red,
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Text(
-                state.genres[index].name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ],
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 15,
+        childAspectRatio: 1.2,
+      ),
+      itemCount: state.addButtonState ? 15 : 6,
+      itemBuilder: (context, index) => Column(
+        children: [
+          Container(
+            height: 58,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.red,
+            ),
           ),
-        ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            state.genres[index].name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     );
   }

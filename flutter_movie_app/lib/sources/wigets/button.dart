@@ -50,7 +50,7 @@ class InteractiveButton extends StatefulWidget {
   });
 
   @override
-  State<InteractiveButton> get createState => _InteractiveButtonState();
+  State<StatefulWidget> get createState => _InteractiveButtonState();
 }
 
 class _InteractiveButtonState extends State<InteractiveButton> {
