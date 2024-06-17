@@ -106,6 +106,8 @@ class Home extends ConsumerWidget {
   }
 
   Widget _firstSection(BuildContext context, HomeState state, WidgetRef ref) {
+    ScrollController scrollController = ScrollController();
+
     return Column(
       children: [
         Row(
@@ -115,6 +117,8 @@ class Home extends ConsumerWidget {
                 ref
                     .read(homeControllerProvider.notifier)
                     .isTappedReleaseButton();
+
+                scrollController.jumpTo(0);
               },
               isSelected: state.releaseButtonState,
               deselectedStyle: ButtonDecorationStyle(
@@ -142,6 +146,8 @@ class Home extends ConsumerWidget {
                 ref
                     .read(homeControllerProvider.notifier)
                     .isTappedPopularityButton();
+
+                scrollController.jumpTo(0);
               },
               isSelected: state.popularityButtonState,
               deselectedStyle: ButtonDecorationStyle(
@@ -166,12 +172,20 @@ class Home extends ConsumerWidget {
         const SizedBox(
           height: 16,
         ),
-        _buildMovieList(context, state),
+        _buildMovieList(
+          context,
+          state,
+          scrollController,
+        ),
       ],
     );
   }
 
-  Widget _buildMovieList(BuildContext context, HomeState state) {
+  Widget _buildMovieList(
+    BuildContext context,
+    HomeState state,
+    ScrollController scrollController,
+  ) {
     // FutureBuilder를 사용하면 Future가 완료된 것을 감지해 해당 값을 UI에 반영하지만,
     // 값이 변경되었을 때에는 UI를 다시 업데이트하지 않는다.
     // 이를 해결하기 위해 Riverpod의 watch를 사용한다. -> 자동 업데이트 가능
@@ -179,6 +193,7 @@ class Home extends ConsumerWidget {
     return SizedBox(
       height: 260,
       child: ListView.builder(
+        controller: scrollController,
         scrollDirection: Axis.horizontal,
         itemCount: state.movies.length,
         itemBuilder: (context, index) {
