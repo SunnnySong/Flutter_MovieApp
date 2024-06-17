@@ -20,7 +20,7 @@ class ButtonDecorationStyle {
   });
 }
 
-class InteractiveButton extends StatefulWidget {
+class InteractiveButton extends StatelessWidget {
   final ButtonDecorationStyle deselectedStyle;
   final ButtonDecorationStyle selectedStyle;
 
@@ -37,41 +37,37 @@ class InteractiveButton extends StatefulWidget {
 
   const InteractiveButton({
     super.key,
-    required this.isSelected,
     required this.deselectedStyle,
     required this.selectedStyle,
     required this.text,
-    required this.onPressed,
-    required this.cornerRadius,
+    this.cornerRadius,
     this.verticalPadding,
     this.horizantalPadding,
     this.fontSize,
     this.fontWeight,
+    required this.onPressed,
+    required this.isSelected,
   });
 
-  @override
-  State<StatefulWidget> get createState => _InteractiveButtonState();
-}
-
-class _InteractiveButtonState extends State<InteractiveButton> {
-  // 버튼이 선택되었을 때와 선택되지 않았을 때의 스타일을 반환하는 함수
   ButtonDecorationStyle get _style {
-    return widget.isSelected ? widget.selectedStyle : widget.deselectedStyle;
+    return isSelected ? selectedStyle : deselectedStyle;
   }
 
   @override
   Widget build(BuildContext context) {
+    // 버튼이 선택되었을 때와 선택되지 않았을 때의 스타일을 반환하는 함수
+
     return GestureDetector(
       onTap: () {
-        setState(() {
-          // 버튼 클릭될 때 실행할 함수를 상위 위젯으로부터 받음.
-          widget.onPressed();
-        });
+        // setState(() {
+        // 버튼 클릭될 때 실행할 함수를 상위 위젯으로부터 받음.
+        onPressed();
+        // });
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: widget.verticalPadding ?? 0,
-          horizontal: widget.horizantalPadding ?? 0,
+          vertical: verticalPadding ?? 0,
+          horizontal: horizantalPadding ?? 0,
         ),
         decoration: BoxDecoration(
           color: _style.backgroundColor,
@@ -80,15 +76,15 @@ class _InteractiveButtonState extends State<InteractiveButton> {
             width: _style.borderWidth ?? 0,
           ),
           borderRadius: BorderRadius.circular(
-            widget.cornerRadius ?? 0,
+            cornerRadius ?? 0,
           ),
         ),
         child: Text(
-          widget.text,
+          text,
           style: TextStyle(
             color: _style.foregroundColor,
-            fontSize: widget.fontSize ?? _style.fontSize,
-            fontWeight: widget.fontWeight ?? _style.fontWeight,
+            fontSize: fontSize ?? _style.fontSize,
+            fontWeight: fontWeight ?? _style.fontWeight,
           ),
         ),
       ),

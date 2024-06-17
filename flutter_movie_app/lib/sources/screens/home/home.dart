@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_controller.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_state.dart';
-import 'package:flutter_movie_app/sources/wigets/button.dart';
+import 'package:flutter_movie_app/sources/wigets/interactive_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Home extends ConsumerWidget {
