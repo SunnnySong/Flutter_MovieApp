@@ -24,8 +24,6 @@ class MovieRepository implements MovieRepositoryInterface {
     );
     final result = response.body;
     if (result is Success<MovieDTO>) {
-      // ignore: avoid_print
-      print("하하 ${result.value.results[0].posterPath}");
       return result.value.results;
     } else {
       throw Exception('Failed to load movies');
@@ -41,8 +39,6 @@ class MovieRepository implements MovieRepositoryInterface {
     );
     final result = response.body;
     if (result is Success<GenreDTO>) {
-      // ignore: avoid_print
-      print("하하 ${result.value.genres[0].name}");
       return result.value.genres;
     } else {
       throw Exception('Failed to load movies');

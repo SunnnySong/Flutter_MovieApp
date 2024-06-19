@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie_app/sources/routing/app_router.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_controller.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_state.dart';
 import 'package:flutter_movie_app/sources/wigets/interactive_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});
@@ -14,8 +16,8 @@ class Home extends ConsumerWidget {
     ScrollController scrollController = ScrollController();
 
     return Scaffold(
-      appBar: _appBar(),
       backgroundColor: const Color(0xFF0F0F10),
+      appBar: _appBar(context),
       body: switch (state) {
         AsyncData(:final value) => SingleChildScrollView(
             controller: scrollController,
@@ -44,37 +46,10 @@ class Home extends ConsumerWidget {
         AsyncLoading() => const Text('로딩 중이에요'),
         _ => throw UnimplementedError(),
       },
-      bottomNavigationBar: _bottomNavigationBar(),
     );
   }
 
-  Widget _bottomNavigationBar() {
-    return BottomNavigationBar(
-      backgroundColor: const Color(0xFF0F0F10),
-      selectedItemColor: const Color(0xFFE64980),
-      unselectedItemColor: const Color(0xFFCCCCCC),
-      selectedLabelStyle: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.normal,
-      ),
-      unselectedLabelStyle: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.normal,
-      ),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: '홈',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: '홈',
-        ),
-      ],
-    );
-  }
-
-  PreferredSizeWidget _appBar() {
+  PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
       title: const Text(
         '야곰 시네마',
@@ -87,13 +62,16 @@ class Home extends ConsumerWidget {
       backgroundColor: const Color(0xFF0F0F10),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            // context.pushNamed(AppRoute.detail.name);
+            context.goNamed(AppRoute.detail.name);
+          },
           icon: const Icon(Icons.movie_creation_outlined),
           color: const Color(0xFFCCCCCC),
         ),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.play_circle_outline_outlined),
+          icon: const Icon(Icons.search),
           color: const Color(0xFFCCCCCC),
         ),
         IconButton(
