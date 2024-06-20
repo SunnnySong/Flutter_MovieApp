@@ -20,7 +20,7 @@ final appRouterProvider = AutoDisposeProvider<AppRouter>.internal(
 );
 
 typedef AppRouterRef = AutoDisposeProviderRef<AppRouter>;
-String _$routerHash() => r'3fd8cb7acd84ae420c303dddc869ad9341f6e2de';
+String _$routerHash() => r'3334e7e1c9da104e0ace6898abf7d4289d6795a5';
 
 /// See also [router].
 @ProviderFor(router)

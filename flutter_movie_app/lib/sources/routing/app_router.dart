@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_movie_app/sources/screens/detail/detail.dart';
 import 'package:flutter_movie_app/sources/screens/home/home.dart';
 import 'package:flutter_movie_app/sources/screens/profile/profile.dart';
+import 'package:flutter_movie_app/sources/screens/search/search.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,6 +11,7 @@ part 'app_router.g.dart';
 enum AppRoute {
   home,
   detail,
+  search,
   profile,
   test,
 }
@@ -47,23 +49,21 @@ class AppRouter {
                     key: state.pageKey,
                   ),
                   routes: [
+                    // !! Detail 화면
                     GoRoute(
                       path: 'detail',
                       name: AppRoute.detail.name,
                       builder: (context, state) => Detail(
                         key: state.pageKey,
                       ),
-
-                      // onPopPage: (context, state) {
-                      //   // Check if the previous route is the home route
-                      //   if (state.previousRoute?.name == AppRoute.home.name) {
-                      //     // Pop the current route and the detail route
-                      //     state.navigator.popUntil((route) =>
-                      //         route.settings.name == AppRoute.home.name);
-                      //     return true; // Prevent default popping behavior
-                      //   }
-                      //   return false; // Allow default popping behavior
-                      // },
+                    ),
+                    // !! Search 화면
+                    GoRoute(
+                      path: 'search',
+                      name: AppRoute.search.name,
+                      builder: (context, state) => Search(
+                        key: state.pageKey,
+                      ),
                     ),
                   ],
                 ),
