@@ -3,6 +3,7 @@ import 'package:flutter_movie_app/sources/routing/app_router.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_controller.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_state.dart';
 import 'package:flutter_movie_app/sources/wigets/interactive_button.dart';
+import 'package:flutter_movie_app/sources/wigets/movie_poster_title.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -63,14 +64,15 @@ class Home extends ConsumerWidget {
       actions: [
         IconButton(
           onPressed: () {
-            // context.pushNamed(AppRoute.detail.name);
-            context.goNamed(AppRoute.detail.name);
+            context.pushNamed(AppRoute.detail.name);
           },
           icon: const Icon(Icons.movie_creation_outlined),
           color: const Color(0xFFCCCCCC),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.pushNamed(AppRoute.search.name);
+          },
           icon: const Icon(Icons.search),
           color: const Color(0xFFCCCCCC),
         ),
@@ -179,32 +181,12 @@ class Home extends ConsumerWidget {
           return Container(
             width: 140,
             margin: const EdgeInsets.only(right: 16),
-            child: Column(
-              children: [
-                Container(
-                  width: 140,
-                  height: 198,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.red,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://image.tmdb.org/t/p/w500/${movie.posterPath}'),
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  movie.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ],
+            child: MoviePosterTitleWidget(
+              imageUrl: 'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+              imageWidth: 140,
+              imageHeight: 198,
+              title: movie.title,
+              spacing: 12,
             ),
           );
         },
