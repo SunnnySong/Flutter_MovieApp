@@ -38,6 +38,17 @@ abstract class MovieService extends ChopperService
     @Query('language') String language,
   );
 
+  @override
+  @FactoryConverter(
+    response: movieListResponseConverter,
+  )
+  @Get(path: '/search/movie')
+  Future<MovieListResponse> search(
+    @Query('query') String query,
+    @Query('language') String language,
+    @Query('page') int page,
+  );
+
   // * json으로 받아온 response를 MovieListResponse로 변환
   static FutureOr<MovieListResponse> movieListResponseConverter(
       Response response) {
@@ -54,22 +65,6 @@ abstract class MovieService extends ChopperService
     final result = Success(genreData);
 
     return response.copyWith(body: result);
-  }
-
-  //! 추후 삭제
-  static MovieService create() {
-    final client = ChopperClient(
-      baseUrl: Uri.parse(baseUrl),
-      interceptors: [
-        RequestInterceptor(),
-      ],
-      converter: const JsonConverter(),
-      errorConverter: ResponseErrorConverter(),
-      services: [
-        _$MovieService(),
-      ],
-    );
-    return _$MovieService(client);
   }
 }
 

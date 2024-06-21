@@ -12,6 +12,12 @@ abstract class MovieRepositoryInterface {
     @Query('language') String language,
   });
 
+  Future<List<Movie>> search({
+    @Query('query') required String query,
+    @Query('language') String language,
+    @Query('page') int page,
+  });
+
   Future<List<Movie>> fetchMoviesByReleaseDate();
 
   Future<List<Movie>> fetchMoviesByPopularity();

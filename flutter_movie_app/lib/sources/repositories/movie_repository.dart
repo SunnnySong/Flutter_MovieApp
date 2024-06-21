@@ -46,6 +46,25 @@ class MovieRepository implements MovieRepositoryInterface {
   }
 
   @override
+  Future<List<Movie>> search({
+    required String query,
+    String language = "ko-KR",
+    int page = 1,
+  }) async {
+    final response = await _movieService.search(
+      query,
+      language,
+      page,
+    );
+    final result = response.body;
+    if (result is Success<MovieDTO>) {
+      return result.value.results;
+    } else {
+      throw Exception('Failed to load movies');
+    }
+  }
+
+  @override
   Future<List<Movie>> fetchMoviesByReleaseDate() async {
     final movies = await fetchNowPlayingMovies();
     movies.sort((a, b) => a.releaseDate.compareTo(b.releaseDate));
@@ -80,4 +99,9 @@ Future<List<Movie>> fetchMoviesByPopularity(FetchMoviesByPopularityRef ref) {
 @riverpod
 Future<List<Genre>> fetchGenre(FetchGenreRef ref) {
   return ref.watch(movieRepositoryProvider).fetchGenre();
+}
+
+@riverpod
+Future<List<Movie>> search(SearchRef ref, {required String query}) {
+  return ref.watch(movieRepositoryProvider).search(query: query);
 }

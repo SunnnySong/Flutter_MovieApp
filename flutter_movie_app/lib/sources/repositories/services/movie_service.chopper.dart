@@ -56,4 +56,28 @@ final class _$MovieService extends MovieService {
       responseConverter: MovieService.genreResponseConverter,
     );
   }
+
+  @override
+  Future<Response<Result<MovieDTO>>> search(
+    String query,
+    String language,
+    int page,
+  ) {
+    final Uri $url = Uri.parse('/search/movie');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'query': query,
+      'language': language,
+      'page': page,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<Result<MovieDTO>, MovieDTO>(
+      $request,
+      responseConverter: MovieService.movieListResponseConverter,
+    );
+  }
 }

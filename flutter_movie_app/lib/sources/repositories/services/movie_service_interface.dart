@@ -17,4 +17,9 @@ abstract class MovieServiceInterface {
   Future<GenreResponse> fetchGenre(
     @Query('language') String language,
   );
+  Future<MovieListResponse> search(
+    @Query('query') String query,
+    @Query('language') String language,
+    @Query('page') int page,
+  );
 }
