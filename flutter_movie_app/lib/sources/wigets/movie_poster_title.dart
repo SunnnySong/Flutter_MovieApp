@@ -26,51 +26,56 @@ class MoviePosterTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: imageWidth,
-          height: imageHeight,
-          child: Image.network(
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                    color: const Color(0xFFCCCCCC),
+    return SizedBox(
+      width: imageWidth,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: imageHeight,
+            width: imageWidth,
+            child: Image.network(
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                      color: const Color(0xFFCCCCCC),
+                    ),
+                  );
+                }
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 58,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.red,
                   ),
                 );
-              }
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                height: 58,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.red,
-                ),
-              );
-            },
-            imageUrl,
-            fit: BoxFit.cover,
+              },
+              imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        SizedBox(height: spacing),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            color: fontColor,
+          SizedBox(height: spacing),
+          Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+              color: fontColor,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

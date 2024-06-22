@@ -35,6 +35,7 @@ class AppRouter {
               backgroundColor: const Color(0xFF0F0F10),
               body: navigationShell,
               bottomNavigationBar: _bottomNavigationBar(navigationShell),
+              appBar: _buildAppBar(context, navigationShell),
             );
           },
           branches: <StatefulShellBranch>[
@@ -133,6 +134,48 @@ class AppRouter {
         fontWeight: FontWeight.normal,
       ),
     );
+  }
+
+  PreferredSizeWidget _buildAppBar(
+      BuildContext context, StatefulNavigationShell navigationShell) {
+    switch (navigationShell.currentIndex) {
+      // home
+      case 0:
+        return AppBar(
+          title: const Text(
+            '야곰 시네마',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: const Color(0xFF0F0F10),
+          actions: [
+            IconButton(
+              onPressed: () {
+                context.pushNamed(AppRoute.detail.name);
+              },
+              icon: const Icon(Icons.movie_creation_outlined),
+              color: const Color(0xFFCCCCCC),
+            ),
+            IconButton(
+              onPressed: () {
+                context.pushNamed(AppRoute.search.name);
+              },
+              icon: const Icon(Icons.search),
+              color: const Color(0xFFCCCCCC),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.menu),
+              color: const Color(0xFFCCCCCC),
+            ),
+          ],
+        );
+      default:
+        return AppBar();
+    }
   }
 }
 

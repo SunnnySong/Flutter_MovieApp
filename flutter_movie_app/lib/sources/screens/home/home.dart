@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_movie_app/sources/routing/app_router.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_controller.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_state.dart';
 import 'package:flutter_movie_app/sources/wigets/interactive_button.dart';
 import 'package:flutter_movie_app/sources/wigets/movie_poster_title.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});
@@ -19,25 +16,49 @@ class Home extends ConsumerWidget {
 
     return state.when(
       data: (homeState) {
-        return Column(
-          children: [
-            _appBar(context),
-            ..._firstSection(context, homeState, ref),
-            Expanded(
-              flex: 2,
-              child: _secondSection(
-                context,
-                homeState,
-                ref,
-                scrollController,
+        return SingleChildScrollView(
+          controller: scrollController,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 20,
+                  bottom: 18,
+                ),
+                child: Column(
+                  children: [
+                    ..._firstSection(context, homeState, ref),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Container(
+                width: double.infinity,
+                height: 8,
+                color: const Color(0xFF060606),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 18,
+                  left: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ..._secondSection(
+                        context, homeState, ref, scrollController),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
       loading: () {
         return const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: Colors.yellow,
+          ),
         );
       },
       error: (error, stack) {
@@ -45,41 +66,6 @@ class Home extends ConsumerWidget {
           child: Text('Error: $error'),
         );
       },
-    );
-  }
-
-  PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        '야곰 시네마',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: const Color(0xFF0F0F10),
-      actions: [
-        IconButton(
-          onPressed: () {
-            context.pushNamed(AppRoute.detail.name);
-          },
-          icon: const Icon(Icons.movie_creation_outlined),
-          color: const Color(0xFFCCCCCC),
-        ),
-        IconButton(
-          onPressed: () {
-            context.pushNamed(AppRoute.search.name);
-          },
-          icon: const Icon(Icons.search),
-          color: const Color(0xFFCCCCCC),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu),
-          color: const Color(0xFFCCCCCC),
-        ),
-      ],
     );
   }
 
@@ -146,7 +132,7 @@ class Home extends ConsumerWidget {
         ],
       ),
       const SizedBox(
-        height: 16,
+        height: 15,
       ),
       _buildMovieList(
         context,
@@ -165,11 +151,15 @@ class Home extends ConsumerWidget {
     // 값이 변경되었을 때에는 UI를 다시 업데이트하지 않는다.
     // 이를 해결하기 위해 Riverpod의 watch를 사용한다. -> 자동 업데이트 가능
 
-    return Expanded(
-      flex: 1,
-      child: ListView.builder(
+    return AspectRatio(
+      // 가로 / 세로 비율
+      aspectRatio: 16 / 10,
+      child: ListView.separated(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(
+          width: 12,
+        ),
         itemCount: state.movies.length,
         itemBuilder: (context, index) {
           final movie = state.movies[index];
@@ -185,7 +175,7 @@ class Home extends ConsumerWidget {
     );
   }
 
-  Widget _secondSection(
+  List<Widget> _secondSection(
     BuildContext context,
     HomeState state,
     WidgetRef ref,
@@ -201,6 +191,9 @@ class Home extends ConsumerWidget {
         final RenderBox renderBox =
             secondSectionKey.currentContext?.findRenderObject() as RenderBox;
         final offset = renderBox.localToGlobal(Offset.zero);
+
+        // ignore: avoid_print
+        print(scrollController);
 
         scrollController.animateTo(
           !state.addButtonState ? offset.dy / 2 : 0,
@@ -243,66 +236,58 @@ class Home extends ConsumerWidget {
       ),
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '장르별 영화',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+    return [
+      const Text(
+        '장르별 영화',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        _buildGenreMovies(state),
-        const SizedBox(
-          height: 10,
-        ),
-        plusButton,
-        const SizedBox(
-          height: 20,
-        ),
-      ],
-    );
+      ),
+      const SizedBox(
+        height: 15,
+      ),
+      _buildGenreMovies(state),
+      Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 20),
+        child: plusButton,
+      ),
+    ];
   }
 
   Widget _buildGenreMovies(HomeState state) {
-    return Expanded(
-      flex: 2,
-      child: GridView.builder(
-        shrinkWrap: true,
-        // physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 15,
-          childAspectRatio: 1.2,
-        ),
-        itemCount: state.addButtonState ? 15 : 6,
-        itemBuilder: (context, index) => Column(
-          children: [
-            Container(
-              height: 58,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.red,
-              ),
+    return GridView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 15,
+        childAspectRatio: 1.3,
+      ),
+      itemCount: state.addButtonState ? 15 : 6,
+      itemBuilder: (context, index) => Column(
+        children: [
+          Container(
+            height: 58,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.red,
             ),
-            const SizedBox(
-              height: 5,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            state.genres[index].name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
             ),
-            Text(
-              state.genres[index].name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
