@@ -48,6 +48,15 @@ class MoviePosterTitleWidget extends StatelessWidget {
                 );
               }
             },
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                height: 58,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.red,
+                ),
+              );
+            },
             imageUrl,
             fit: BoxFit.cover,
           ),

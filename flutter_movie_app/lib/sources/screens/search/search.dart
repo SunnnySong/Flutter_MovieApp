@@ -1,4 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_movie_app/sources/data/dto/home/movie.dart';
+import 'package:flutter_movie_app/sources/screens/search/controllers/search_controller.dart';
+import 'package:flutter_movie_app/sources/screens/search/controllers/search_state.dart';
+import 'package:flutter_movie_app/sources/wigets/movie_poster_title.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Search extends ConsumerWidget {
@@ -6,63 +11,59 @@ class Search extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(searchControllerProvider);
+
     return Scaffold(
+      // backgroundColor: const Color(0xFF0F0F10),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15),
-          child: SearchAnchor(
-            builder: (context, controller) {
-              return SearchBar(
-                controller: controller,
-                onTap: () {
-                  // 추천 검색어를 보여주는 화면으로 이동
-                  controller.openView();
-                },
-                onChanged: (text) {
-                  controller.openView();
-                },
-                leading: const Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Icon(
-                    Icons.search,
-                    color: Color(0xFFCCCCCC),
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SearchBar(
+                  onSubmitted: (value) => ref
+                      .read(searchControllerProvider.notifier)
+                      .searchMovies(value),
                 ),
-                backgroundColor: WidgetStateProperty.all(
-                  const Color(0xFF1C1C1E),
-                ),
-              );
-            },
-            suggestionsBuilder: (context, controller) {
-              return List<ListTile>.generate(5, (int index) {
-                final String item = 'item $index';
-                return ListTile(
-                  title: Container(
-                    width: 140,
-                    height: 198,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.red,
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                            'https://image.tmdb.org/t/p/w500/${11}'),
-                        fit: BoxFit.cover,
+                const SizedBox(height: 30),
+                switch (state) {
+                  AsyncData(:final value) => GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount: value.movies.length,
+                      itemBuilder: (context, index) => MoviePosterTitleWidget(
+                        imageUrl:
+                            'https://image.tmdb.org/t/p/w500/${value.movies[index].posterPath}',
+                        imageWidth: 91,
+                        imageHeight: 143,
+                        title: value.movies[index].title,
+                        spacing: 5,
                       ),
                     ),
-                  ),
-                  subtitle: const Text('Hello'),
-                  horizontalTitleGap: 20,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 56.0),
-                  minVerticalPadding: 50,
-                  onTap: () {
-                    controller.closeView(item);
-                  },
-                );
-              });
-            },
+                  AsyncError() => const Text('오류났어요'),
+                  AsyncLoading() => const Text('오류났어요'),
+                  AsyncValue<SearchState>() => throw UnimplementedError(),
+                }
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+class MovieMock {
+  final String title;
+  final String posterPath;
+
+  MovieMock({
+    required this.title,
+    required this.posterPath,
+  });
 }

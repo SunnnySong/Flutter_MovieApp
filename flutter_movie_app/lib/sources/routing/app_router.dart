@@ -32,6 +32,7 @@ class AppRouter {
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
             return Scaffold(
+              backgroundColor: const Color(0xFF0F0F10),
               body: navigationShell,
               bottomNavigationBar: _bottomNavigationBar(navigationShell),
             );

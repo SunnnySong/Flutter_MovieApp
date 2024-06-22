@@ -56,6 +56,10 @@ class MovieRepository implements MovieRepositoryInterface {
       language,
       page,
     );
+
+    // ignore: avoid_print
+    print(response.body);
+
     final result = response.body;
     if (result is Success<MovieDTO>) {
       return result.value.results;

@@ -21,15 +21,13 @@ class MovieDTO {
 @JsonSerializable()
 class Movie {
   bool adult;
-  @JsonKey(name: 'backdrop_path')
-  String backdropPath;
   int id;
   @JsonKey(name: 'original_title')
   String originalTitle;
   String overview;
   double popularity;
   @JsonKey(name: 'poster_path')
-  String posterPath;
+  String? posterPath;
   @JsonKey(name: 'release_date')
   DateTime releaseDate;
   String title;
@@ -37,7 +35,6 @@ class Movie {
 
   Movie({
     required this.adult,
-    required this.backdropPath,
     required this.id,
     required this.originalTitle,
     required this.overview,

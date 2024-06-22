@@ -20,12 +20,11 @@ Map<String, dynamic> _$MovieDTOToJson(MovieDTO instance) => <String, dynamic>{
 
 Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       adult: json['adult'] as bool,
-      backdropPath: json['backdrop_path'] as String,
       id: (json['id'] as num).toInt(),
       originalTitle: json['original_title'] as String,
       overview: json['overview'] as String,
       popularity: (json['popularity'] as num).toDouble(),
-      posterPath: json['poster_path'] as String,
+      posterPath: json['poster_path'] as String?,
       releaseDate: DateTime.parse(json['release_date'] as String),
       title: json['title'] as String,
       video: json['video'] as bool,
@@ -33,7 +32,6 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
 
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'adult': instance.adult,
-      'backdrop_path': instance.backdropPath,
       'id': instance.id,
       'original_title': instance.originalTitle,
       'overview': instance.overview,

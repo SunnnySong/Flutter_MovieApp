@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_movie_app/sources/routing/app_router.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_controller.dart';
 import 'package:flutter_movie_app/sources/screens/home/controllers/home_state.dart';
@@ -16,36 +17,33 @@ class Home extends ConsumerWidget {
 
     ScrollController scrollController = ScrollController();
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0F10),
-      appBar: _appBar(context),
-      body: switch (state) {
-        AsyncData(:final value) => SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, bottom: 20),
-                    child: _firstSection(context, value, ref),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: _secondSection(
-                      context,
-                      value,
-                      ref,
-                      scrollController,
-                    ),
-                  ),
-                ],
+    return state.when(
+      data: (homeState) {
+        return Column(
+          children: [
+            _appBar(context),
+            ..._firstSection(context, homeState, ref),
+            Expanded(
+              flex: 2,
+              child: _secondSection(
+                context,
+                homeState,
+                ref,
+                scrollController,
               ),
             ),
-          ),
-        AsyncError() => const Text('오류났어요'),
-        AsyncLoading() => const Text('로딩 중이에요'),
-        _ => throw UnimplementedError(),
+          ],
+        );
+      },
+      loading: () {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+      error: (error, stack) {
+        return Center(
+          child: Text('Error: $error'),
+        );
       },
     );
   }
@@ -85,80 +83,77 @@ class Home extends ConsumerWidget {
     );
   }
 
-  Widget _firstSection(BuildContext context, HomeState state, WidgetRef ref) {
+  List<Widget> _firstSection(
+      BuildContext context, HomeState state, WidgetRef ref) {
     ScrollController scrollController = ScrollController();
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            InteractiveButton(
-              onPressed: () {
-                ref
-                    .read(homeControllerProvider.notifier)
-                    .isTappedReleaseButton();
+    return [
+      Row(
+        children: [
+          InteractiveButton(
+            onPressed: () {
+              ref.read(homeControllerProvider.notifier).isTappedReleaseButton();
 
-                scrollController.jumpTo(0);
-              },
-              isSelected: state.releaseButtonState,
-              deselectedStyle: ButtonDecorationStyle(
-                backgroundColor: Colors.transparent,
-                foregroundColor: const Color(0xFFCCCCCC),
-                borderColor: const Color(0xFF444444),
-                borderWidth: 1,
-              ),
-              selectedStyle: ButtonDecorationStyle(
-                backgroundColor: const Color(0xFFe64980),
-                foregroundColor: Colors.white,
-              ),
-              text: "영화개봉순",
-              cornerRadius: 48,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              verticalPadding: 13,
-              horizantalPadding: 16,
+              scrollController.jumpTo(0);
+            },
+            isSelected: state.releaseButtonState,
+            deselectedStyle: ButtonDecorationStyle(
+              backgroundColor: Colors.transparent,
+              foregroundColor: const Color(0xFFCCCCCC),
+              borderColor: const Color(0xFF444444),
+              borderWidth: 1,
             ),
-            const SizedBox(
-              width: 12,
+            selectedStyle: ButtonDecorationStyle(
+              backgroundColor: const Color(0xFFe64980),
+              foregroundColor: Colors.white,
             ),
-            InteractiveButton(
-              onPressed: () {
-                ref
-                    .read(homeControllerProvider.notifier)
-                    .isTappedPopularityButton();
+            text: "영화개봉순",
+            cornerRadius: 48,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            verticalPadding: 13,
+            horizantalPadding: 16,
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          InteractiveButton(
+            onPressed: () {
+              ref
+                  .read(homeControllerProvider.notifier)
+                  .isTappedPopularityButton();
 
-                scrollController.jumpTo(0);
-              },
-              isSelected: state.popularityButtonState,
-              deselectedStyle: ButtonDecorationStyle(
-                backgroundColor: Colors.transparent,
-                foregroundColor: const Color(0xFFCCCCCC),
-                borderColor: const Color(0xFF444444),
-                borderWidth: 1,
-              ),
-              selectedStyle: ButtonDecorationStyle(
-                backgroundColor: const Color(0xFFe64980),
-                foregroundColor: Colors.white,
-              ),
-              text: "예매율순",
-              cornerRadius: 48,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              verticalPadding: 13,
-              horizantalPadding: 16,
+              scrollController.jumpTo(0);
+            },
+            isSelected: state.popularityButtonState,
+            deselectedStyle: ButtonDecorationStyle(
+              backgroundColor: Colors.transparent,
+              foregroundColor: const Color(0xFFCCCCCC),
+              borderColor: const Color(0xFF444444),
+              borderWidth: 1,
             ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        _buildMovieList(
-          context,
-          state,
-          scrollController,
-        ),
-      ],
-    );
+            selectedStyle: ButtonDecorationStyle(
+              backgroundColor: const Color(0xFFe64980),
+              foregroundColor: Colors.white,
+            ),
+            text: "예매율순",
+            cornerRadius: 48,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            verticalPadding: 13,
+            horizantalPadding: 16,
+          ),
+        ],
+      ),
+      const SizedBox(
+        height: 16,
+      ),
+      _buildMovieList(
+        context,
+        state,
+        scrollController,
+      ),
+    ];
   }
 
   Widget _buildMovieList(
@@ -170,24 +165,20 @@ class Home extends ConsumerWidget {
     // 값이 변경되었을 때에는 UI를 다시 업데이트하지 않는다.
     // 이를 해결하기 위해 Riverpod의 watch를 사용한다. -> 자동 업데이트 가능
 
-    return SizedBox(
-      height: 260,
+    return Expanded(
+      flex: 1,
       child: ListView.builder(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
         itemCount: state.movies.length,
         itemBuilder: (context, index) {
           final movie = state.movies[index];
-          return Container(
-            width: 140,
-            margin: const EdgeInsets.only(right: 16),
-            child: MoviePosterTitleWidget(
-              imageUrl: 'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
-              imageWidth: 140,
-              imageHeight: 198,
-              title: movie.title,
-              spacing: 12,
-            ),
+          return MoviePosterTitleWidget(
+            imageUrl: 'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+            imageWidth: 140,
+            imageHeight: 198,
+            title: movie.title,
+            spacing: 12,
           );
         },
       ),
@@ -279,36 +270,39 @@ class Home extends ConsumerWidget {
   }
 
   Widget _buildGenreMovies(HomeState state) {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 15,
-        childAspectRatio: 1.2,
-      ),
-      itemCount: state.addButtonState ? 15 : 6,
-      itemBuilder: (context, index) => Column(
-        children: [
-          Container(
-            height: 58,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.red,
+    return Expanded(
+      flex: 2,
+      child: GridView.builder(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 15,
+          childAspectRatio: 1.2,
+        ),
+        itemCount: state.addButtonState ? 15 : 6,
+        itemBuilder: (context, index) => Column(
+          children: [
+            Container(
+              height: 58,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.red,
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            state.genres[index].name,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
+            const SizedBox(
+              height: 5,
             ),
-          ),
-        ],
+            Text(
+              state.genres[index].name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
