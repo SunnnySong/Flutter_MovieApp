@@ -12,6 +12,8 @@ class MoviePosterTitleWidget extends StatelessWidget {
   final FontWeight fontWeight;
   final Color fontColor;
 
+  final CrossAxisAlignment crossAxisAlignment;
+
   const MoviePosterTitleWidget({
     super.key,
     required this.imageUrl,
@@ -21,6 +23,7 @@ class MoviePosterTitleWidget extends StatelessWidget {
     this.fontSize = 14,
     this.fontWeight = FontWeight.normal,
     this.fontColor = Colors.white,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
     required this.spacing,
   });
 
@@ -29,7 +32,7 @@ class MoviePosterTitleWidget extends StatelessWidget {
     return SizedBox(
       width: imageWidth,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: crossAxisAlignment,
         children: [
           SizedBox(
             height: imageHeight,
@@ -53,10 +56,19 @@ class MoviePosterTitleWidget extends StatelessWidget {
               },
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  height: 58,
+                  height: imageHeight,
+                  width: imageWidth,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: Colors.red,
+                    color: const Color(0xFF1C1C1C),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '이미지 \n준비중',
+                      style: TextStyle(
+                        color: Color(0xFFCCCCCC),
+                      ),
+                    ),
                   ),
                 );
               },

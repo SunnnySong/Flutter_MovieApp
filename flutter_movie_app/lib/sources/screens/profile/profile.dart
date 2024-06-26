@@ -8,7 +8,9 @@ class Profile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const Scaffold(
       body: Center(
-        child: Text('프로필 화면입니다.'),
+        child: Text(
+          '프로필 화면입니다.',
+        ),
       ),
     );
   }

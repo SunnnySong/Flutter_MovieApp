@@ -9,11 +9,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
 enum AppRoute {
+  // tab 화면부터 나열
   home,
-  detail,
-  search,
   profile,
   test,
+  detail,
+  search,
 }
 
 class AppRouter {
@@ -34,7 +35,8 @@ class AppRouter {
             return Scaffold(
               backgroundColor: const Color(0xFF0F0F10),
               body: navigationShell,
-              bottomNavigationBar: _bottomNavigationBar(navigationShell),
+              bottomNavigationBar:
+                  _bottomNavigationBar(context, navigationShell),
               appBar: _buildAppBar(context, navigationShell),
             );
           },
@@ -74,11 +76,12 @@ class AppRouter {
             StatefulShellBranch(
               routes: <RouteBase>[
                 GoRoute(
-                    path: '/profile',
-                    name: AppRoute.profile.name,
-                    builder: (context, state) => Profile(
-                          key: state.pageKey,
-                        )),
+                  path: '/profile',
+                  name: AppRoute.profile.name,
+                  builder: (context, state) => Profile(
+                    key: state.pageKey,
+                  ),
+                ),
               ],
             ),
             StatefulShellBranch(
@@ -89,7 +92,9 @@ class AppRouter {
                   builder: (context, state) => Scaffold(
                     key: state.pageKey,
                     body: const Center(
-                      child: Text('테스트'),
+                      child: Text(
+                        '테스트',
+                      ),
                     ),
                   ),
                 ),
@@ -101,7 +106,8 @@ class AppRouter {
     );
   }
 
-  Widget _bottomNavigationBar(StatefulNavigationShell navigationShell) {
+  Widget _bottomNavigationBar(
+      BuildContext context, StatefulNavigationShell navigationShell) {
     return BottomNavigationBar(
       items: const [
         BottomNavigationBarItem(
@@ -121,6 +127,7 @@ class AppRouter {
       onTap: (int index) {
         //! 각각의 StatefulshellBranch로 이동
         navigationShell.goBranch(index);
+        context.goNamed(AppRoute.values[index].name);
       },
       backgroundColor: const Color(0xFF0F0F10),
       selectedItemColor: const Color(0xFFE64980),
@@ -153,15 +160,13 @@ class AppRouter {
           backgroundColor: const Color(0xFF0F0F10),
           actions: [
             IconButton(
-              onPressed: () {
-                context.pushNamed(AppRoute.detail.name);
-              },
+              onPressed: () {},
               icon: const Icon(Icons.movie_creation_outlined),
               color: const Color(0xFFCCCCCC),
             ),
             IconButton(
               onPressed: () {
-                context.pushNamed(AppRoute.search.name);
+                context.goNamed(AppRoute.search.name);
               },
               icon: const Icon(Icons.search),
               color: const Color(0xFFCCCCCC),
